@@ -8,7 +8,7 @@ router = APIRouter(prefix="/answers", tags=["answers"])
 
 
 @router.get("/{aid}", response_model=AnswerOut)
-def get_answer(aid: int, db: Session = Depends(get_db)):
+def get_answer(aid: int, db: Session = Depends(get_db)) -> acrud.Answer:
     a = acrud.get_answer(db, aid)
     if not a:
         raise HTTPException(status_code=404, detail="Answer not found")
@@ -16,7 +16,7 @@ def get_answer(aid: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{aid}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_answer(aid: int, db: Session = Depends(get_db)):
+def delete_answer(aid: int, db: Session = Depends(get_db)) -> None:
     a = acrud.get_answer(db, aid)
     if not a:
         raise HTTPException(status_code=404, detail="Answer not found")
