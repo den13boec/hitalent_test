@@ -1,30 +1,24 @@
-from pydantic import BaseModel, Field
+from __future__ import annotations
 from datetime import datetime
-from typing import List
+from typing import Annotated
+from pydantic import BaseModel, ConfigDict
+from pydantic import StringConstraints, Field
+from app.schemas.answer import AnswerOut
+
+NonEmptyStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class QuestionCreate(BaseModel):
-    text: str = Field(min_length=1, strip_whitespace=True)
+    text: NonEmptyStr = Field(json_schema_extra={"example": "Your question"})
 
 
 class QuestionOut(BaseModel):
     id: int
     text: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class AnswerOut(BaseModel):
-    id: int
-    user_id: str
-    text: str
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class QuestionDetail(QuestionOut):
-    answers: List[AnswerOut] = []
+    answers: list[AnswerOut] = []
+    model_config = ConfigDict(from_attributes=True)

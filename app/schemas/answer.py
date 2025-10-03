@@ -1,10 +1,18 @@
-from pydantic import BaseModel, Field
+from __future__ import annotations
 from datetime import datetime
+from typing import Annotated, Optional
+from pydantic import BaseModel, ConfigDict, StringConstraints, Field
+
+# convenient aliases
+StrippedStr = Annotated[str, StringConstraints(strip_whitespace=True)]
+NonEmptyStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class AnswerCreate(BaseModel):
-    user_id: str = Field(min_length=1, strip_whitespace=True)
-    text: str = Field(min_length=1, strip_whitespace=True)
+    user_id: Optional[StrippedStr] = Field(
+        default=None, json_schema_extra={"example": ""}
+    )
+    text: NonEmptyStr = Field(json_schema_extra={"example": "Your answer"})
 
 
 class AnswerOut(BaseModel):
@@ -13,6 +21,4 @@ class AnswerOut(BaseModel):
     user_id: str
     text: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
