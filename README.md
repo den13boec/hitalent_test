@@ -13,16 +13,20 @@ cd hitalent_test
 
 Перед запуском необходимо создать .env файл в корне проекта для подключения к БД:
 
-```env
-# Вариант 1 (одной строкой)
-DATABASE_URL=postgresql+psycopg2://qna:secret@db:5432/qna
+- Вариант 1 (по частям; URL базы данных соберётся автоматически)
 
-# Вариант 2 (по частям; DATABASE_URL соберётся автоматически)
+```env
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 POSTGRES_DB=qna
 POSTGRES_USER=qna
 POSTGRES_PASSWORD=secret
+```
+
+- Вариант 2 (одной строкой)
+
+```env
+DATABASE_URL=postgresql+psycopg2://qna:secret@db:5432/qna
 ```
 
 >POSTGRES_HOST=db — это имя сервиса базы данных в docker-compose.yml
