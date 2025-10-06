@@ -14,7 +14,7 @@ from app.db.base import Base
 from app.models import question as _question  # noqa: F401
 from app.models import answer as _answer      # noqa: F401
 
-# SQLite in-memory: общий инстанс для всех соединений
+# SQLite in-memory: a shared instance for all connections
 engine: Engine = create_engine(
     "sqlite+pysqlite:///:memory:",
     connect_args={"check_same_thread": False},
@@ -37,9 +37,9 @@ def _get_test_db() -> Generator:
     finally:
         db.close()
 
-# Подменяем зависимость БД у приложения
+# Replacing the application's database dependency
 fastapi_app.dependency_overrides.clear()
-from app.db.session import get_db  # импорт после fastapi_app, чтобы избежать циклов
+from app.db.session import get_db
 fastapi_app.dependency_overrides[get_db] = _get_test_db
 
 @pytest.fixture(autouse=True)
